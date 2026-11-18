@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff7fb">
+  <title>For My Little Frozen ✨</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #59455d;
+      --muted: #897b91;
+      --pink: #e88daf;
+      --lavender: #c9b8ed;
+      --paper: rgba(255, 255, 255, .86);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+      background:
+        radial-gradient(ellipse at 10% 12%, rgba(255, 221, 236, .8), transparent 34%),
+        radial-gradient(ellipse at 88% 84%, rgba(219, 224, 255, .78), transparent 35%),
+        linear-gradient(145deg, #fff8fb, #f8f6ff 55%, #f2faff);
+    }
+
+    .page {
+      position: relative;
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      padding: 48px 20px;
+      isolation: isolate;
+    }
+
+    .sparkle {
+      position: fixed;
+      z-index: -1;
+      color: white;
+      opacity: .8;
+      pointer-events: none;
+      animation: twinkle 3s ease-in-out infinite alternate;
+    }
+
+    .sparkle:nth-child(1) { top: 12%; left: 12%; font-size: 23px; }
+    .sparkle:nth-child(2) { top: 20%; right: 12%; font-size: 17px; animation-delay: .8s; }
+    .sparkle:nth-child(3) { bottom: 14%; left: 17%; font-size: 19px; animation-delay: 1.4s; }
+    .sparkle:nth-child(4) { right: 18%; bottom: 18%; font-size: 25px; animation-delay: .4s; }
+
+    .intro {
+      position: fixed;
+      z-index: 5;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 24px;
+      background:
+        radial-gradient(ellipse at 18% 15%, rgba(255, 213, 233, .9), transparent 35%),
+        radial-gradient(ellipse at 84% 82%, rgba(204, 216, 255, .9), transparent 38%),
+        linear-gradient(145deg, #fff8fb, #f8f6ff 55%, #f2faff);
+    }
+
+    .intro::before, .intro::after {
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 50%;
+      content: "";
+      animation: orbit 12s linear infinite;
+      pointer-events: none;
+    }
+
+    .intro::after {
+      width: 330px;
+      height: 330px;
+      animation-direction: reverse;
+      animation-duration: 18s;
+    }
+
+    .intro-card {
+      z-index: 1;
+      width: min(100%, 430px);
+      padding: clamp(30px, 8vw, 52px) 28px;
+      border: 1px solid rgba(255, 255, 255, .95);
+      border-radius: 30px;
+      background: rgba(255, 255, 255, .78);
+      box-shadow: 0 24px 80px rgba(111, 84, 139, .16);
+      text-align: center;
+      backdrop-filter: blur(14px);
+      animation: introEnter .9s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .gift {
+      display: inline-block;
+      margin: 12px 0 20px;
+      font-size: 76px;
+      filter: drop-shadow(0 10px 12px rgba(166, 105, 156, .2));
+      animation: giftFloat 2.4s ease-in-out infinite;
+    }
+
+    .intro-title {
+      margin: 0;
+      color: #885d91;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 8vw, 2.8rem);
+      font-weight: 500;
+    }
+
+    .intro-copy {
+      margin: 14px 0 26px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .open-button {
+      padding: 13px 24px;
+      border: 0;
+      border-radius: 999px;
+      color: white;
+      background: linear-gradient(110deg, #d982aa, #a883cf);
+      box-shadow: 0 8px 20px rgba(176, 111, 163, .25);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .open-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 11px 24px rgba(176, 111, 163, .32);
+    }
+
+    .open-button:focus-visible {
+      outline: 3px solid #885d91;
+      outline-offset: 4px;
+    }
+
+    .intro.is-opening {
+      animation: introExit .7s ease-in forwards;
+      pointer-events: none;
+    }
+
+    .letter {
+      width: min(100%, 700px);
+      padding: clamp(28px, 6vw, 58px);
+      border: 1px solid rgba(255, 255, 255, .92);
+      border-radius: 30px;
+      background: var(--paper);
+      box-shadow: 0 24px 80px rgba(111, 84, 139, .14), 0 5px 18px rgba(181, 139, 171, .1);
+      text-align: center;
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      transform: translateY(24px) scale(.98);
+    }
+
+    .gift-note {
+      width: min(100%, 700px);
+      margin-top: 28px;
+      padding: clamp(28px, 6vw, 48px);
+      border: 1px solid rgba(255, 255, 255, .92);
+      border-radius: 30px;
+      background: var(--paper);
+      box-shadow: 0 24px 80px rgba(111, 84, 139, .14);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(24px) scale(.98);
+    }
+
+    .gift-title {
+      margin: 0 0 24px;
+      color: #885d91;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.7rem, 6vw, 2.45rem);
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .gift-image {
+      display: block;
+      width: min(100%, 480px);
+      max-height: 420px;
+      margin: 0 auto;
+      border: 8px solid white;
+      border-radius: 22px;
+      background: #fff8fb;
+      box-shadow: 0 14px 36px rgba(111, 84, 139, .16);
+      object-fit: contain;
+    }
+
+    .gift-caption {
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .is-open .letter {
+      animation: letterReveal .9s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .is-open .gift-note {
+      animation: letterReveal .9s .15s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .date {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .crown {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 37px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    h1 {
+      margin: 0;
+      color: #885d91;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.15rem, 8vw, 3.65rem);
+      font-weight: 500;
+      line-height: 1.12;
+    }
+
+    .subtitle {
+      margin: 15px 0 0;
+      color: #aa7c9f;
+      font-size: 1.05rem;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 30px 0;
+      color: var(--pink);
+      font-size: 1.1rem;
+    }
+
+    .divider::before, .divider::after {
+      height: 1px;
+      flex: 1;
+      content: "";
+      background: linear-gradient(90deg, transparent, #edc4d6);
+    }
+
+    .divider::after { transform: rotate(180deg); }
+
+    .poem {
+      margin: 0 auto 28px;
+      color: #805c86;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.12rem, 3.8vw, 1.42rem);
+      font-style: italic;
+      line-height: 1.85;
+    }
+
+    .message {
+      margin: 0;
+      color: #64566d;
+      font-size: clamp(.98rem, 2.8vw, 1.08rem);
+      line-height: 1.95;
+      text-align: left;
+    }
+
+    .message p { margin: 0 0 16px; }
+
+    .signoff {
+      margin: 28px 0 0;
+      color: #a45e88;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-style: italic;
+    }
+
+    .footer {
+      margin: 25px 0 0;
+      color: #9c8da2;
+      font-size: .82rem;
+      letter-spacing: .04em;
+    }
+
+    .heart {
+      display: inline-block;
+      color: #ed8fba;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes introEnter {
+      from { opacity: 0; transform: translateY(18px) scale(.94); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes introExit {
+      to { opacity: 0; transform: scale(1.04); visibility: hidden; }
+    }
+
+    @keyframes letterReveal {
+      from { opacity: 0; transform: translateY(24px) scale(.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes giftFloat {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50% { transform: translateY(-9px) rotate(4deg); }
+    }
+
+    @keyframes orbit {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50% { transform: translateY(-7px) rotate(4deg); }
+    }
+
+    @keyframes twinkle {
+      from { opacity: .35; transform: scale(.8); }
+      to { opacity: .95; transform: scale(1.15); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; }
+      .open-button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <span class="sparkle" aria-hidden="true">✦</span>
+    <span class="sparkle" aria-hidden="true">✧</span>
+    <span class="sparkle" aria-hidden="true">✦</span>
+    <span class="sparkle" aria-hidden="true">✧</span>
+
+    <section class="intro" id="intro" aria-labelledby="intro-title">
+      <div class="intro-card">
+        <p class="date">A little surprise for you</p>
+        <span class="gift" aria-hidden="true">🎁</span>
+        <h1 class="intro-title" id="intro-title">For my little princess</h1>
+        <p class="intro-copy">Ek chhota sa surprise, sirf tumhare liye ✨</p>
+        <button class="open-button" id="open-letter" type="button" aria-controls="letter">Open your letter ✨</button>
+      </div>
+    </section>
+
+    <article class="letter" id="letter" tabindex="-1" aria-hidden="true" inert>
+      <p class="date">18 November · A little note for you</p>
+      <span class="crown" aria-hidden="true">👑</span>
+      <h1>Happy Princess Day</h1>
+      <p class="subtitle">to my little Frozen ❄️</p>
+
+      <div class="divider" aria-hidden="true"><span class="heart">💗</span></div>
+
+      <blockquote class="poem">
+        Duniya mein chehre hazaar milenge,<br>
+        par tumsa koi dil ko pyaara nahi hoga.<br>
+        Khubsurti toh bahuton mein hogi,<br>
+        par tumsa sachcha aur wafadaar nahi hoga. ✨
+      </blockquote>
+
+      <div class="divider" aria-hidden="true"><span class="heart">💗</span></div>
+
+      <div class="message">
+        <p>Happy Princess Day, my little Frozen! Mujhe tum bahut zyada pasand ho. Tumse sundar mujhe kuch bhi nahi lagta, yaar — tum ekdum perfect ho. Tumhara figure, tumhari soul, tumhara mind… tumhara sab kuch mujhe bahut pyaara lagta hai. Padhai ho ya kuch aur, tum har jagah itni achhi ho. 🥹</p>
+        <p>Pata nahi Bhagwan ne tumhe banate waqt kya socha hoga, par itna zaroor keh sakta hoon: duniya mein koi kitna bhi sundar ho, woh tumse zyada sundar nahi ho sakta. Aur agar koi ho bhi, toh tum jitna imaandaar aur wafadaar dil uske paas nahi hoga. 💗</p>
+        <p>Tumhe dekhkar bas tumhe ek tight hug karne ka mann karta hai 🫂🤭 — paas na ho paun toh tumhari yaad mein saansein bhi thodi si ulajh jaati hain. Abhi tum so rahi hogi; kal subah jab yeh padhogi, toh tumhara din bahut achha jaane wala hai. Aur dekhna, tum mere is chhote se letter ke baare mein sochkar muskuraogi. Bas kisi bhi tarah, ek baar padh lena, okay? 🥺✨</p>
+      </div>
+
+      <p class="signoff">I love you sooo muchhh 🫂🤭💋</p>
+      <p class="footer">Made with all my love, just for you <span class="heart">💗</span></p>
+    </article>
+
+    <section class="gift-note" aria-labelledby="gift-title" aria-hidden="true" inert>
+      <p class="date">One last little surprise</p>
+      <h2 class="gift-title" id="gift-title">Meri pyaari si princess ke liye pyaara sa tohfa 🎁</h2>
+      <img class="gift-image" src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTdwNmlqd242aDhzdTVraDJxc3VuNXFkbXB1ajliZ2tjeWVqejd5MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1JmGiBtqTuehfYxuy9/giphy.gif" alt="A little animated gift for my princess" loading="lazy" decoding="async">
+      <p class="gift-caption">Bas tumhare liye, meri Frozen 💗</p>
+    </section>
+  </main>
+  <script>
+    const intro = document.querySelector("#intro");
+    const openButton = document.querySelector("#open-letter");
+    const letter = document.querySelector("#letter");
+    const giftNote = document.querySelector(".gift-note");
+
+    openButton.addEventListener("click", () => {
+      document.body.classList.add("is-open");
+      intro.classList.add("is-opening");
+      intro.setAttribute("aria-hidden", "true");
+      letter.removeAttribute("aria-hidden");
+      letter.removeAttribute("inert");
+      giftNote.removeAttribute("aria-hidden");
+      giftNote.removeAttribute("inert");
+      letter.focus({ preventScroll: true });
+      openButton.disabled = true;
+    });
+
+    intro.addEventListener("animationend", (event) => {
+      if (event.target === intro) intro.hidden = true;
+    });
+  </script>
+</body>
+</html>
